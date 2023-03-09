@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Table(name = "alumno")
 public class Alumno {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")

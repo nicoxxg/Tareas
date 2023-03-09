@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Table(name = "curso")
 public class Curso {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
