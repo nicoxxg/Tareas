@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="./profesor.css" />
+    <title>Login & Register Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    
+</head>
+
+<body>
+  <div id="app">
+
+    <nav>
+        <div>
+            <h1>Escuela Unitaria</h1>
+        </div>
+        <div class="contenedor-perfil">
+            <div class="perfil" @click="cambiarLabel()">
+                <h4>{{cliente.nombre+ " "+ cliente.apellido }}</h4>
+                <img src="./img/3135768.png" alt="" class="foto-perfil">
+                
+            </div>
+            <div class="label" v-if="label">
+                <a href="perfil.html">Perfil</a>
+                <a href="./profesor.html">Clases</a>
+                <a href="./lista-alumnos.html">Alumnos</a>
+                <button @click="logout()">Cerrar Sesion</button>
+                
+            </div>
+        </div>
+        
+        
+    </nav>
+    <main>
+        <div class="contenedor-informacion-alumno" v-if="informacionAlumno">
+            <div>
+                <h3>informacion de {{informacionAlumno.nombre + " " + informacionAlumno.apellido}} </h3>
+                <div class="informacion-alumno" >
+                    <div>
+                        <p>nombre: {{informacionAlumno.nombre}} </p>
+                        <p>apellido: {{informacionAlumno.apellido}} </p>
+
+                    </div>
+
+                    <div >
+                        <p> email: {{informacionAlumno.email}} </p>
+                        <p>suspendido; {{informacionAlumno.suspendido}} </p>
+                    </div>
+
+                    
+
+                </div>
+            </div>
+            <div>
+                <button v-if="!informacionAlumno.suspendido" @click="suspenderAlumno(informacionAlumno.id)"> Suspender</button>
+                <button v-else @click="suspenderAlumno(informacionAlumno.id)">Desuspender</button>
+            </div>
+            
+            <div class="contenedor-clases-alumno">
+                <div v-for="inscripcion in informacionAlumno.inscripciones" class="clase-alumno">
+                    <h6>apodo: {{inscripcion.nombreAlumno}} </h6>
+                    <h6>clase: {{inscripcion.curso.numeroGrado}} </h6>
+                    <h6>Turno: {{inscripcion.curso.turno}} </h6>
+                    <h6>profesor a cargo: {{inscripcion.curso.profesor.nombre}} </h6>
+                </div>
+                
+            </div>
+            <div>
+
+            </div>
+        </div>
+        <div v-else class="contenedor-formulario-crear-clase"> 
+            no hay ningun alumno seleccionado o no existe
+        </div>
+        
+        
+        
+    </main>
+
+  </div>
+    <!-- Pills navs -->
+    
+    <script src="https://kit.fontawesome.com/db55518b9d.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/Administrador/profesor.js"></script>
+</body>
+</html>
