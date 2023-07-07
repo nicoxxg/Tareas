@@ -31,7 +31,8 @@ class WebAuthorization extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-                .antMatchers("/Profesor/**").hasAuthority("Profesor")
+                .antMatchers(HttpMethod.POST,"/api/alumno/create").permitAll()
+                .antMatchers("/Profesor/**").hasAnyAuthority("Profesor","Admin")
                 .antMatchers("/Alumno/**").hasAuthority("Alumno")
                 .antMatchers("/Administrador/**").hasAuthority("Admin")
                 .antMatchers(HttpMethod.PATCH,"/api/profesor/current/actualizar","/api/curso/{idCurso}/actualizar").hasAnyAuthority("Admin","Profesor")
@@ -43,7 +44,7 @@ class WebAuthorization extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/current/**").hasAnyAuthority("Admin","Alumno","Profesor")
                 .antMatchers("/api/Inscripcion/create","/api/current/inscripcion/{id}","/api/alumno","/api/alumno/{id}").hasAnyAuthority("Profesor","Admin")
                 .antMatchers("/api/curso","/api/current","/api/curso/{id}").hasAnyAuthority("Admin","Profesor","Alumno")
-                .antMatchers("/api/alumno/create","/api/profesor/create").permitAll()
+                .antMatchers(HttpMethod.POST,"/api/profesor/create").permitAll()
                 .antMatchers(HttpMethod.PUT,"/api/curso/cambiar/profesor").hasAuthority("Admin")
                 .antMatchers("/admin/**","/rest/**","/h2-console","/api/**","/api/profesor").hasAuthority("Admin");
 

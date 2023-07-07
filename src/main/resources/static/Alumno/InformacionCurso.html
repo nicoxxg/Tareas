@@ -60,22 +60,44 @@
                 </div>
             </div>
             
-            <div class="contenedor-clases-alumno">
-                <div class="clase-alumno">
+            <div class="contenedor-clases-alumno" >
+                <div class="clase-alumno" v-if="!cambiarApodo">
                     <h6>apodo: {{cursoInformacion.nombreAlumno}} </h6>
                     <h6>email: {{cursoInformacion.alumno.email}} </h6>
-                    <div  class="info-clase eliminar">
-                        <a @click="eliminarAlumnoDelCurso(cursoInformacion.alumno.id)" href="#"> eliminar</a>
+                    <div class="info-alumno" >
+                        <div  class="info-clase eliminar">
+                            <a @click="eliminarAlumnoDelCurso(cursoInformacion.alumno.id)" href="#"> eliminar</a>
+                        </div>
+                        <div  class="info-clase editar">
+                            <a @click="activarCambiarApodo()" href="#"> editar apodo</a>
+                        </div>
                     </div>
-                </div>
-                
-            </div>
-            <div>
 
-            </div>
+                    
+                </div>
+                <div class="contenedor-clases-alumno" v-else>
+                    <div class="clase-alumno">
+                        <h6>apodo: <input v-model="nuevoApodo" type="text"> </h6>
+                        <h6></h6>
+                        <div class="info-alumno" >
+                            <div  class="info-clase eliminar">
+                                <a @click="desactivarCambiarApodo()" href="#"> cancelar</a>
+                            </div>
+                            <div  class="info-clase editar">
+                                <a @click="editarApodoCurso(cursoInformacion.alumno.id)" href="#"> guardar</a>
+                            </div>
+                        </div>
+    
+                        
+                    </div>
+                    
+                
+                </div>
+            <div>
         </div>
-        <div v-else class="contenedor-formulario-crear-clase"> 
+        <div v-if="cursoInformacion.length == 0" class="contenedor-formulario-crear-clase"> 
             no hay ningun curso seleccionado o no existe
+            
         </div>
         
         

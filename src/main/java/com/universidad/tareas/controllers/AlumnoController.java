@@ -54,8 +54,9 @@ public class AlumnoController {
         return alumnoRepository.save(alumno);
     }
 
-    @PostMapping("/alumno/create")//
-    public ResponseEntity<Object> createAlumno(@RequestParam String nombre,
+    @PostMapping("/alumno/create")
+    public ResponseEntity<Object> createAlumno(
+                                               @RequestParam String nombre,
                                                @RequestParam String apellido,
                                                @RequestParam String email,
                                                @RequestParam String contraseña){

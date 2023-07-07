@@ -37,7 +37,17 @@ createApp({
                 })
             }
             if (this.model = "Alumno") {
-                return console.log("es un alumno")
+                return axios.post("/api/alumno/create",`nombre=${this.registerFormulario.nombre}&apellido=${this.registerFormulario.apellido}&email=${this.registerFormulario.email}&contraseña=${this.registerFormulario.contraseña}`)
+                .then((response) => {
+                    this.loginFormulario.email = this.registerFormulario.email
+                    this.loginFormulario.contraseña = this.registerFormulario.contraseña
+                })
+                .then((response) => {
+                    this.login()
+                })
+                .catch((err) =>{
+                    console.log(err.response.data)
+                })
             }
             if (this.model == "") {
                 return console.log("no se eligio nada")

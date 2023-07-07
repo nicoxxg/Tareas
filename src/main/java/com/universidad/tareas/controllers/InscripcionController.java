@@ -74,7 +74,7 @@ public class InscripcionController {
         List<Inscripcion> inscriocionCliente = alumno.getInscripciones().stream().filter(inscripcion1 -> inscripcion1.getId() == inscripcion.getId()).collect(Collectors.toList());
 
         if (inscriocionCliente == null){
-            return  new ResponseEntity<>("esta inscripocion no le pertenece al alumno",HttpStatus.FORBIDDEN);
+            return  new ResponseEntity<>("esta inscripcion no le pertenece al alumno",HttpStatus.FORBIDDEN);
         }
         inscripcion.setActivo(false);
         inscripcionRepository.save(inscripcion);

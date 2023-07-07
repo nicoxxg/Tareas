@@ -4,8 +4,10 @@ createApp({
     data() {
     return {
         label:false,
+        cambiarApodo:false,
         cliente:{},
         ListCursosInscrito:null,
+        nuevoApodo:null,
         formularioNuevoCurso:{
             nombre:"",
             horario:null,
@@ -34,6 +36,26 @@ createApp({
 
     },
     methods:{
+        activarCambiarApodo(){
+            this.cambiarApodo = true
+        },
+        desactivarCambiarApodo(){
+            this.cambiarApodo = false
+        },
+        editarApodoCurso(id){
+            if (this.nuevoApodo == null || this.nuevoApodo == "") {
+                this.nuevoApodo = thius.cursoInformacion.nombreAlumno
+            }
+            axios.patch(`/api/current/inscripcion/${id}/actualizar`,`nuevoNombre=${this.nuevoApodo}`)
+            .then((response) => {
+                this.obtenerCursoInscritoPorId
+                this.cambiarApodo = false
+                window.location.reload();
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+        },
         crearInscripcionCurso(idCurso){
             let id = window.location.href.split('?=')[1]
             
