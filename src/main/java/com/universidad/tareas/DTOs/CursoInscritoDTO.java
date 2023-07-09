@@ -13,6 +13,7 @@ public class CursoInscritoDTO {
     private String descripcion;
     private TurnoClase turno;
     private Profesor profesor;
+    private Set<TareaDTO> tarea;
 
     public CursoInscritoDTO(Curso curso) {
         this.id = curso.getId();
@@ -20,6 +21,11 @@ public class CursoInscritoDTO {
         this.descripcion = curso.getDescripcion();
         this.turno = curso.getTurno();
         this.profesor = curso.getProfesor();
+        this.tarea = curso.getTareas().stream().map(tarea1 -> new TareaDTO(tarea1)).collect(Collectors.toSet());
+    }
+
+    public Set<TareaDTO> getTarea() {
+        return tarea;
     }
 
     public long getId() {

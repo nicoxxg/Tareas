@@ -18,6 +18,9 @@ public class Curso {
     private TurnoClase turno;
 
     @OneToMany(mappedBy = "curso",fetch = FetchType.EAGER)
+    private Set<Tarea> tareas;
+
+    @OneToMany(mappedBy = "curso",fetch = FetchType.EAGER)
     private Set<Inscripcion> inscripciones = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -75,5 +78,13 @@ public class Curso {
 
     public void setProfesor(Profesor profesor) {
         this.profesor = profesor;
+    }
+
+    public Set<Tarea> getTareas() {
+        return tareas;
+    }
+
+    public void setTareas(Set<Tarea> tareas) {
+        this.tareas = tareas;
     }
 }

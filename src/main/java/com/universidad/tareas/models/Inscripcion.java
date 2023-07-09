@@ -14,7 +14,6 @@ public class Inscripcion {
     private String nombreAlumno;
     private boolean activo;
 
-
     @ManyToOne(fetch = FetchType.EAGER)
     private Alumno alumno;
 

@@ -25,6 +25,9 @@ public class Alumno {
     @OneToMany(mappedBy = "alumno",fetch = FetchType.EAGER)
     private Set<Inscripcion> inscripciones;
 
+    @OneToMany(mappedBy = "alumno",fetch = FetchType.EAGER)
+    private Set<Entrega> entregas;
+
 
     public Alumno() {
     }
@@ -100,5 +103,13 @@ public class Alumno {
 
     public  String getNombreCompleto(){
         return getNombre() + " " + getApellido();
+    }
+
+    public Set<Entrega> getEntregas() {
+        return entregas;
+    }
+
+    public void setEntregas(Set<Entrega> entregas) {
+        this.entregas = entregas;
     }
 }

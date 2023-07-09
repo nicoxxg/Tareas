@@ -18,15 +18,20 @@ public class CursoDTO {
     private String descripcion;
     private TurnoClase turno;
     private Set<InscripcionDTO> inscripciones;
-    private Profesor profesor;
 
+    private Set<TareaDTO> tareas;
     public CursoDTO(Curso curso) {
         this.id = curso.getId();
         this.numeroGrado = curso.getNumeroGrado();
         this.descripcion = curso.getDescripcion();
         this.turno = curso.getTurno();
-        this.profesor = curso.getProfesor();
-        this.inscripciones = curso.getInscripciones().stream().filter(inscripcion -> !inscripcion.getAlumno().isSuspendido()).filter(inscripcion -> inscripcion.isActivo()).map((inscripcion) -> new InscripcionDTO(inscripcion)).collect(Collectors.toSet());
+        this.tareas = curso.getTareas().stream()
+                .map(tarea -> new TareaDTO(tarea)).collect(Collectors.toSet());
+        this.inscripciones = curso.getInscripciones().stream()
+                .filter(inscripcion -> !inscripcion.getAlumno().isSuspendido())
+                .filter(inscripcion -> inscripcion.isActivo())
+                .map((inscripcion) -> new InscripcionDTO(inscripcion)).collect(Collectors.toSet());
+
     }
 
     public long getId() {
@@ -47,9 +52,5 @@ public class CursoDTO {
 
     public Set<InscripcionDTO> getInscripciones() {
         return inscripciones;
-    }
-
-    public Profesor getProfesor() {
-        return profesor;
-    }
+    };
 }

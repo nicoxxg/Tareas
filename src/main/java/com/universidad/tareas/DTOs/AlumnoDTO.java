@@ -1,6 +1,7 @@
 package com.universidad.tareas.DTOs;
 
 import com.universidad.tareas.models.Alumno;
+import com.universidad.tareas.models.EstadoTarea;
 import com.universidad.tareas.models.Inscripcion;
 import com.universidad.tareas.models.Perfiles;
 
@@ -19,6 +20,8 @@ public class AlumnoDTO {
 
     private boolean suspendido;
     private Set<InscripcionDTO> inscripciones;
+    private Set<AlumnoTareaDTO> tareaEntregada;
+
 
     public AlumnoDTO(Alumno alumno) {
         this.id = alumno.getId();
@@ -28,7 +31,17 @@ public class AlumnoDTO {
         this.contraseña = alumno.getContraseña();
         this.perfiles = alumno.getPerfiles();
         this.suspendido = alumno.isSuspendido();
-        this.inscripciones = alumno.getInscripciones().stream().filter(inscripcion -> inscripcion.isActivo()).map((inscripcion) -> new InscripcionDTO(inscripcion)).collect(Collectors.toSet());
+        this.inscripciones = alumno.getInscripciones().stream().filter(inscripcion -> inscripcion.isActivo())
+                .map((inscripcion) -> new InscripcionDTO(inscripcion)).collect(Collectors.toSet());
+        this.tareaEntregada = alumno.getEntregas().stream()
+                .map(entrega -> new AlumnoTareaDTO(entrega.getTarea(),entrega)).collect(Collectors.toSet());
+
+
+
+    }
+
+    public Set<AlumnoTareaDTO> getTareaEntregada() {
+        return tareaEntregada;
     }
 
     public boolean isSuspendido() {
