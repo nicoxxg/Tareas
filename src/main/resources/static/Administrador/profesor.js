@@ -152,6 +152,7 @@ createApp({
             axios.get('/api/current')
             .then((response) =>{
                 this.cliente = response.data
+                console.log(this.cliente);
             }).catch((error) =>{
             })
         },

@@ -20,6 +20,8 @@ public class CursoDTO {
     private Set<InscripcionDTO> inscripciones;
     private Set<TareaDTO> tareas;
     private ProfesorInformacionDTO profesor;
+
+    private Set<AlumnoInscritoDTO> alumno;
     public CursoDTO(Curso curso) {
         this.id = curso.getId();
         this.numeroGrado = curso.getNumeroGrado();

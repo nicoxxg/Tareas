@@ -130,6 +130,7 @@ createApp({
             axios.get('/api/current')
             .then((response) =>{
                 this.cliente = response.data
+                console.log(this.cliente)
             }).catch((error) =>{
             })
         },
@@ -143,6 +144,7 @@ createApp({
             this.idCursoSelecionado = id;
             let curso = this.listCurso.filter((curso) => curso.id === id)
             this.listaAlumno = curso[0].inscripciones
+            console.log(this.listaAlumno)
             
         },
         eliminarAlumnoDelCurso(idAlumno){

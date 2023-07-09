@@ -35,6 +35,8 @@ public class TareasApplication {
 			// Crear profesor
 			Profesor admin = new Profesor("pepe", "pepe", "admin", passwordEncoder.encode("admin"), Perfiles.Administrador);
 			profesorRepository.save(admin);
+			Profesor profesor = new Profesor("profesor", "erick","profe",passwordEncoder.encode("profe"),Perfiles.Profesor);
+			profesorRepository.save(profesor);
 
 			// Crear curso
 			Curso curso = new Curso("er", "er", TurnoClase.Mañana, admin);

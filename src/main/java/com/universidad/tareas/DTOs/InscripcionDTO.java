@@ -11,14 +11,20 @@ public class InscripcionDTO {
     private long id;
     private String nombreAlumno;
     private boolean activo;
-
     private CursoInscritoDTO curso;
+
+    private AlumnoInscritoDTO alumno;
 
     public InscripcionDTO(Inscripcion inscripcion) {
         this.id = inscripcion.getId();
         this.nombreAlumno = inscripcion.getNombreAlumno();
         this.activo = inscripcion.isActivo();
         this.curso = new CursoInscritoDTO(inscripcion.getCurso()) ;
+        this.alumno = new AlumnoInscritoDTO(inscripcion.getAlumno()) ;
+    }
+
+    public AlumnoInscritoDTO getAlumno() {
+        return alumno;
     }
 
     public long getId() {

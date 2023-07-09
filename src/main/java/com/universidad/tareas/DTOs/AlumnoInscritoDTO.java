@@ -10,14 +10,13 @@ public class AlumnoInscritoDTO {
     private String nombre;
     private String apellido;
     private String email;
-    private String contraseña;
 
     public AlumnoInscritoDTO(Alumno alumno) {
         this.id = alumno.getId();
         this.nombre = alumno.getNombre();
         this.apellido = alumno.getApellido();
         this.email = alumno.getEmail();
-        this.contraseña = alumno.getContraseña();
+
     }
 
     public long getId() {
@@ -34,10 +33,6 @@ public class AlumnoInscritoDTO {
 
     public String getEmail() {
         return email;
-    }
-
-    public String getContraseña() {
-        return contraseña;
     }
 
 
