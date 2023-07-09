@@ -1,12 +1,10 @@
 package com.universidad.tareas.DTOs;
 
-import com.universidad.tareas.models.Alumno;
-import com.universidad.tareas.models.Entrega;
-import com.universidad.tareas.models.EstadoTarea;
-import com.universidad.tareas.models.Inscripcion;
+import com.universidad.tareas.models.*;
 
 public class AlumnosVerificacionDTO {
     private long idTarea;
+    private long idEntrega;
     private long idAlumno;
     private EstadoTarea estado;
     private String nombreTarea;
@@ -14,27 +12,32 @@ public class AlumnosVerificacionDTO {
     private String nombreAlumno;
     private String apellidoAlumno;
     private String emailAlumno;
-    private byte[] archivo;
     private String nombreArchivo;
+    private Nota nota;
 
 
 
     public AlumnosVerificacionDTO(Alumno alumno, Entrega entrega) {
         this.idTarea = entrega.getTarea().getId();
+        this.idEntrega = entrega.getId();
         this.idAlumno = alumno.getId();
         this.nombreTarea = entrega.getTarea().getNombreTarea();
         this.nombreAlumno = alumno.getNombre();
-        this.apodoAlumno =alumno.getInscripciones().stream()
-                .filter(inscripcion -> inscripcion.getCurso().equals(entrega.getTarea().getCurso()))
-                .findFirst()
-                .map(Inscripcion::getNombreAlumno)
-                .orElse(null);
+        this.apodoAlumno = entrega.getNombreAlumno();
         this.apellidoAlumno = alumno.getApellido();
         this.estado = entrega.getEstadoTarea();
         this.emailAlumno = alumno.getEmail();
-        this.archivo = entrega.getArchivo();
         this.nombreArchivo = entrega.getNombreArchivo();
+        this.nota = entrega.getNota();
 
+    }
+
+    public Nota getNota() {
+        return nota;
+    }
+
+    public long getIdEntrega() {
+        return idEntrega;
     }
 
     public EstadoTarea getEstado() {
@@ -69,9 +72,6 @@ public class AlumnosVerificacionDTO {
         return emailAlumno;
     }
 
-    public byte[] getArchivo() {
-        return archivo;
-    }
 
     public String getNombreArchivo() {
         return nombreArchivo;

@@ -40,6 +40,9 @@ public class TareasApplication {
 			Curso curso = new Curso("er", "er", TurnoClase.Mañana, admin);
 			cursoRepository.save(curso);
 
+			Curso curso1 = new Curso("6", "pepepe", TurnoClase.Mañana, admin);
+			cursoRepository.save(curso1);
+
 			// Crear alumnos
 			Alumno alumno1 = new Alumno("John", "Doe", "john.doe@example.com", passwordEncoder.encode("password"), Perfiles.Alumno, false);
 			Alumno alumno2 = new Alumno("Jane", "Smith", "jane.smith@example.com", passwordEncoder.encode("password"), Perfiles.Alumno, false);

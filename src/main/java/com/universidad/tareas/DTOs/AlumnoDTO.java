@@ -1,12 +1,10 @@
 package com.universidad.tareas.DTOs;
 
-import com.universidad.tareas.models.Alumno;
-import com.universidad.tareas.models.EstadoTarea;
-import com.universidad.tareas.models.Inscripcion;
-import com.universidad.tareas.models.Perfiles;
+import com.universidad.tareas.models.*;
 
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -21,6 +19,8 @@ public class AlumnoDTO {
     private boolean suspendido;
     private Set<InscripcionDTO> inscripciones;
     private Set<AlumnoTareaDTO> tareaEntregada;
+    private Set<TareaDTO> tareasPendientes;
+
 
 
     public AlumnoDTO(Alumno alumno) {
@@ -35,9 +35,29 @@ public class AlumnoDTO {
                 .map((inscripcion) -> new InscripcionDTO(inscripcion)).collect(Collectors.toSet());
         this.tareaEntregada = alumno.getEntregas().stream()
                 .map(entrega -> new AlumnoTareaDTO(entrega.getTarea(),entrega)).collect(Collectors.toSet());
+        this.tareasPendientes = calcularTareasPendientes(alumno);
 
+    }
 
+    private Set<TareaDTO> calcularTareasPendientes(Alumno alumno) {
+        Set<TareaDTO> tareasPendientes = new HashSet<>();
 
+        Set<Tarea> tareasActivas = alumno.getInscripciones().stream()
+                .filter(Inscripcion::isActivo)
+                .map(Inscripcion::getCurso)
+                .flatMap(curso -> curso.getTareas().stream())
+                .collect(Collectors.toSet());
+
+        for (Tarea tarea : tareasActivas) {
+            boolean entregada = alumno.getEntregas().stream()
+                    .anyMatch(entrega -> entrega.getTarea().equals(tarea));
+
+            if (!entregada) {
+                tareasPendientes.add(new TareaDTO(tarea));
+            }
+        }
+
+        return tareasPendientes;
     }
 
     public Set<AlumnoTareaDTO> getTareaEntregada() {
@@ -74,5 +94,9 @@ public class AlumnoDTO {
 
     public Set<InscripcionDTO> getInscripciones() {
         return inscripciones;
+    }
+
+    public Set<TareaDTO> getTareasPendientes() {
+        return tareasPendientes;
     }
 }

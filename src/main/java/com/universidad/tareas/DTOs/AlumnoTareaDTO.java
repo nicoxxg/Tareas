@@ -13,6 +13,7 @@ public class AlumnoTareaDTO {
     private String descripcion;
     private Nota nota;
     private boolean entregada;
+    private String nombreArchivo;
 
     public AlumnoTareaDTO(Tarea tareaDTO, Entrega entrega) {
         this.id = tareaDTO.getId();
@@ -20,6 +21,11 @@ public class AlumnoTareaDTO {
         this.descripcion = tareaDTO.getDescripcionTarea();
         this.idEntrega = entrega.getId();
         this.nota = entrega.getNota();
+        this.nombreArchivo = entrega.getNombreArchivo();
+    }
+
+    public String getNombreArchivo() {
+        return nombreArchivo;
     }
 
     public long getIdEntrega() {
