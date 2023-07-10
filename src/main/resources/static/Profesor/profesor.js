@@ -3,6 +3,15 @@ const { createApp } = Vue
 createApp({
     data() {
     return {
+        crearTarea:{
+            nombreTarea: "",
+            descripcionTarea: "", 
+            idCurso:null
+        },
+        listaAlumnosTareaEntregada: null,
+        listaTareaEntregada:null,
+        tareaCorregida:"",
+        corregir: false,
         label:false,
         listCurso:null,
         cliente:{},
@@ -28,8 +37,10 @@ createApp({
         todosAlumnos:null,
         informacionAlumno:null,
         textoFiltro:"",
-        listaAlumnoFiltrado:null,
+        listaAlumnoFiltrado:[],
         cursoInformacion:[],
+        tareaEntregada:[],
+        detalleListaAlumnoTarea:[]
 
     }
     },
@@ -42,6 +53,49 @@ createApp({
         this.obtenerInformacionCurso()
     },
     methods:{
+        corregirTarea(){
+            this.corregir = true;
+        },
+        cancelarCorregirTarea(){
+            this.corregir = false;
+            this.tareaCorregida = ""
+        },
+        guardarCorregirTarea(idEntrega){
+            axios.patch(`/api/profesor/entrega/${idEntrega}/modificar`,`nota=${this.tareaCorregida}`)
+            .then(() =>{
+                window.location.reload()
+            })
+
+        },
+        descargarArchivo(entregaId){
+            axios({
+                url: `/api/profesor/entrega/${entregaId}`, // Reemplaza 123 con el ID del archivo deseado
+                method: 'GET',
+                responseType: 'arraybuffer' // Indica que se espera una respuesta en formato arraybuffer
+              }).then(response => {
+                const nombreArchivo = this.obtenerNombreArchivo(response); // Obtén el nombre del archivo según tu lógica
+                
+                const blob = new Blob([response.data], { type: response.headers['content-type'] });
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', nombreArchivo);
+                document.body.appendChild(link);
+                link.click();
+              });
+        },
+        
+        obtenerNombreArchivo(response) {
+            const contentDisposition = response.headers['content-disposition'];
+            const regex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+            const matches = regex.exec(contentDisposition);
+            
+            if (matches != null && matches[1]) {
+              return matches[1].replace(/['"]/g, '');
+            }
+            
+            return 'archivo_descargado'; // Establece un nombre predeterminado si no se puede obtener el nombre del archivo
+          },
         cambiarInformacionCurso(){
             
             let id = window.location.href.split('?=')[1]
@@ -62,10 +116,14 @@ createApp({
         },
         obtenerInformacionCurso(){
             let id = window.location.href.split('?=')[1]
-            axios.get(`/api/curso/${id}`).then((response) =>{
-                this.cursoInformacion = response.data
-            })
+            if (id) {
+                axios.get(`/api/curso/${id}`).then((response) =>{
+                    this.cursoInformacion = response.data
+                })
+            }
+            
         },
+        
         cambiarInformacionPerfil(){
             if (this.editarInformacionPerfil.nombre == "") {
                 this.editarInformacionPerfil.nombre = this.cliente.nombre
@@ -99,6 +157,7 @@ createApp({
             axios.get(`/api/alumno/${id}`)
             .then((response) =>{
                 this.informacionAlumno = response.data
+                
             })
             .catch(() =>{
                 console.log("no existe el alumno");
@@ -118,6 +177,11 @@ createApp({
             window.location.href = "/Profesor/profesor.html"
         })
         },
+        crearNuevaTarea(){
+            axios.post("/api/tarea", `nombreTarea=${this.crearTarea.nombreTarea}&descripcionTarea=${this.crearTarea.descripcionTarea}&idCurso=${this.crearTarea.idCurso}`).then((response) =>{
+                window.location.href = "/Profesor/profesor.html"
+            })
+        },
         cambiarLabel(){
             if (this.label) {
                 return this.label = false;
@@ -130,7 +194,13 @@ createApp({
             axios.get('/api/current')
             .then((response) =>{
                 this.cliente = response.data
+                this.listaTareaEntregada = this.cliente.verificacionesPorTarea
+                console.log(this.listaTareaEntregada)
                 console.log(this.cliente)
+                this.obtenerInformacionTarea()
+
+            }).then((response) => {
+
             }).catch((error) =>{
             })
         },
@@ -145,8 +215,21 @@ createApp({
             let curso = this.listCurso.filter((curso) => curso.id === id)
             this.listaAlumno = curso[0].inscripciones
             console.log(this.listaAlumno)
+            this.listaAlumnosTareaEntregada = null
             
         },
+        listaAlumnoTareaEntregada(id) {
+            
+            let tarea = this.listaTareaEntregada.find((tarea) => tarea.id === id);
+            if (tarea) {
+                
+                this.listaAlumnosTareaEntregada = tarea.alumno;
+                console.log(this.detalleListaAlumnoTarea)
+
+            } else {
+              this.listaAlumnosTareaEntregada = null;
+            }
+          },
         eliminarAlumnoDelCurso(idAlumno){
             axios.patch(`/api/alumno/${idAlumno}/inscripcion/${this.idCursoSelecionado}/actualizar`)
             .then((response) =>{
@@ -159,19 +242,42 @@ createApp({
             .then((response) =>{
                 window.location.href = "/index.html"
             })
+        },
+        obtenerInformacionTarea() {
+            let id = window.location.href.split('?=')[1];
+            axios.get(`/api/tarea/${id}`).then((response) =>{
+                this.tareaEntregada = response.data
+                console.log(this.tareaEntregada)
+
+                axios.get('/api/current')
+                .then((response) =>{
+                    this.listaTareaEntregada = response.data.verificacionesPorTarea;
+                    console.log(this.listaTareaEntregada);
+
+                    this.detalleListaAlumnoTarea = this.listaTareaEntregada.filter((tarea) => tarea.id === Number(id));
+                    console.log(this.detalleListaAlumnoTarea);
+                })
+                })
         }
         
         
     },
     computed:{
-        filterSerchAlumnos(){
-            if (this.textoFiltro == "") {
-                this.listaAlumnoFiltrado = this.listaAlumno
-            }else{
-                this.listaAlumnoFiltrado = this.listaAlumno.filter((el) => el.nombreAlumno.toLowerCase().includes(this.textoFiltro.toLowerCase().trim()))
+        filterSerchAlumnos() {
+            if (!this.textoFiltro) {
+               this.listaAlumno;
+            } else {
+              if (this.listaAlumnosTareaEntregada) {
+                 this.listaAlumnosTareaEntregada.filter((alumno) =>
+                  alumno.nombre.toLowerCase().includes(this.textoFiltro.toLowerCase().trim())
+                );
+              } else {
+                 this.listaAlumno.filter((alumno) =>
+                  alumno.nombreAlumno.toLowerCase().includes(this.textoFiltro.toLowerCase().trim())
+                );
+              }
             }
-            
-        }
+          },
     }
 }
 ).mount('#app')

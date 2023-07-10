@@ -11,6 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -26,21 +28,28 @@ public class EntregaController {
     CursoRepository cursoRepository;
     @Autowired
     EntregaRepository entregaRepository;
-    @PostMapping("/alumno/entrega")
-    public ResponseEntity<Object> crearNuevaEntrega(Authentication authentication,@RequestParam long idTarea,@RequestParam MultipartFile files) throws IOException {
+    @PostMapping("/alumno/tarea/{idTarea}/entrega")
+    public ResponseEntity<Object> crearNuevaEntrega(Authentication authentication,@PathVariable long idTarea,@RequestParam MultipartFile files) throws IOException {
         Alumno alumno = alumnoRepository.findByEmail(authentication.getName());
         Tarea tarea = tareaRepository.findById(idTarea).orElseThrow(() -> new IllegalArgumentException("Tarea no encontrada"));
-        Curso curso = alumno.getInscripciones().stream().filter(inscripcion ->  inscripcion.getCurso().equals(tarea.getCurso())).findFirst().get().getCurso();
-        if (curso.getNumeroGrado().isEmpty()){
-            return new ResponseEntity<>("el alumno no pertenece al curso", HttpStatus.FORBIDDEN);
+        Optional<Inscripcion> inscripcionOptional = alumno.getInscripciones().stream()
+                .filter(inscripcion -> inscripcion.getCurso().equals(tarea.getCurso()))
+                .findFirst();
+
+        if (!inscripcionOptional.isPresent()) {
+            return new ResponseEntity<>("El alumno no está inscrito en el curso", HttpStatus.FORBIDDEN);
+
         }
         if (entregaRepository.findAll().stream().anyMatch(entrega -> entrega.getAlumno().getId() == alumno.getId() && entrega.getTarea().getId() == tarea.getId())) {
             return new ResponseEntity<>("El alumno ya ha publicado una entrega para esta tarea", HttpStatus.FORBIDDEN);
         }
+        Inscripcion inscripcion = inscripcionOptional.get();
+        Curso curso = inscripcion.getCurso();
+        // Resto del código...
         String nombreAlumno = alumno.getInscripciones().stream()
-                .filter(inscripcion -> inscripcion.getCurso().equals(tarea.getCurso()))
+                .filter(inscripcion1 -> inscripcion1.getCurso().equals(tarea.getCurso()))
                 .findFirst()
-                .map(Inscripcion::getNombreAlumno)
+                .map(inscripcion1 -> inscripcion1.getNombreAlumno())
                 .orElse(null);
         Entrega entrega = new Entrega(nombreAlumno,Nota.Calificando,EstadoTarea.Entregado, files.getBytes(), files.getOriginalFilename(), tarea,alumno);
         entregaRepository.save(entrega);

@@ -4,6 +4,7 @@ createApp({
     data() {
     return {
         label:false,
+        modificarArchivo:false,
         cambiarApodo:false,
         cliente:{},
         ListCursosInscrito:null,
@@ -23,6 +24,9 @@ createApp({
         cursoInformacion:[],
         detalleCurso:[],
         listaCursos:[],
+        tareaEntregada:[],
+        tareasPendientes:[],
+        porCrearEntrega:false,
 
     }
     },
@@ -36,6 +40,101 @@ createApp({
 
     },
     methods:{
+        activarPorCrearEntrega(){
+            this.porCrearEntrega = true
+        },
+        desactivarPorCrearEntrega(){
+            this.porCrearEntrega = false
+        },
+        crearEntrega(idTarea){
+            const archivoInput = document.getElementById('archivoInputTarea');
+            const archivo = archivoInput.files[0];
+            console.log(archivoInput.files)
+            const formData = new FormData();
+            formData.append('files', archivo);
+
+            const config = {
+                headers: {
+                'Content-Type': 'multipart/form-data'
+                }
+            };
+            console.log(formData)
+            axios.post(`/api/alumno/tarea/${idTarea}/entrega`, formData,config)
+            .then(response => {
+                window.location.reload()
+                console.log('Archivo subido correctamente');
+            })
+            .catch(error => {
+                console.error('Error al subir el archivo:', error);
+            });
+        },
+        modificarArchivoTarea(id){
+            const archivoInput = document.getElementById('archivoInput');
+            const archivo = archivoInput.files[0];
+            console.log(archivoInput.files)
+            const formData = new FormData();
+            formData.append('newFile', archivo);
+
+            const config = {
+                headers: {
+                'Content-Type': 'multipart/form-data'
+                }
+            };
+            console.log(formData)
+            axios.patch(`/api/alumno/entrega/${id}/modificar`, formData,config)
+            .then(response => {
+                window.location.reload()
+                console.log('Archivo subido correctamente');
+            })
+            .catch(error => {
+                console.error('Error al subir el archivo:', error);
+            });
+        },
+        cancelarModificar(){
+            this.modificarArchivo = false
+        },
+        activarModificarArchivo(){
+            this.modificarArchivo = true
+        },
+        descargarArchivo(entregaId){
+            axios({
+                url: `/api/alumno/entrega/${entregaId}`, // Reemplaza 123 con el ID del archivo deseado
+                method: 'GET',
+                responseType: 'arraybuffer' // Indica que se espera una respuesta en formato arraybuffer
+              }).then(response => {
+                const nombreArchivo = this.obtenerNombreArchivo(response); // Obtén el nombre del archivo según tu lógica
+                
+                const blob = new Blob([response.data], { type: response.headers['content-type'] });
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', nombreArchivo);
+                document.body.appendChild(link);
+                link.click();
+              });
+        },
+        
+        obtenerNombreArchivo(response) {
+            const contentDisposition = response.headers['content-disposition'];
+            const regex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+            const matches = regex.exec(contentDisposition);
+            
+            if (matches != null && matches[1]) {
+              return matches[1].replace(/['"]/g, '');
+            }
+            
+            return 'archivo_descargado'; // Establece un nombre predeterminado si no se puede obtener el nombre del archivo
+          },
+        obtenerCliente(){
+            axios.get('/api/current')
+            .then((response) =>{
+                this.cliente = response.data
+                this.tareaEntregada = response.data.tareaEntregada
+                this.tareasPendientes = response.data.tareasPendientes
+                console.log(this.cliente)
+            }).catch((error) =>{
+            })
+        },
         activarCambiarApodo(){
             this.cambiarApodo = true
         },
@@ -130,13 +229,6 @@ createApp({
             if (!this.label) {
                 return this.label = true;
             }
-        },
-        obtenerCliente(){
-            axios.get('/api/current')
-            .then((response) =>{
-                this.cliente = response.data
-            }).catch((error) =>{
-            })
         },
         logout(){
             axios.post("/api/logout")

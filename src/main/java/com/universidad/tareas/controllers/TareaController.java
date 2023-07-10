@@ -1,5 +1,6 @@
 package com.universidad.tareas.controllers;
 
+import com.universidad.tareas.DTOs.TareaDTO;
 import com.universidad.tareas.models.Curso;
 import com.universidad.tareas.models.Profesor;
 import com.universidad.tareas.models.Tarea;
@@ -11,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
 
@@ -30,8 +28,11 @@ public class TareaController {
     AlumnoRepository alumnoRepository;
     @Autowired
     CursoRepository cursoRepository;
-
-
+    @GetMapping("/tarea/{idTarea}")
+    private ResponseEntity<TareaDTO> getTareaById(@PathVariable long idTarea){
+        return new ResponseEntity<>(new TareaDTO(tareaRepository.findById(idTarea)
+                .orElseThrow(() -> new IllegalArgumentException("No se encontro la tarea"))),HttpStatus.ACCEPTED);
+    }
 
     @PostMapping("/tarea")
     private ResponseEntity<Object> crearNuevaTarea(Authentication authentication, @RequestParam String nombreTarea,@RequestParam String descripcionTarea,@RequestParam long idCurso){

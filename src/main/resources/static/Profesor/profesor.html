@@ -39,41 +39,67 @@
     </nav>
     <main>
         <div>
-            <div>
-                <h4><a href="./clase-create.html">crear una nueva clase</a></h4>
+            <div class="botones-crear">
+                <h4><a href="./clase-create.html">Crear una nueva clase</a></h4>
+                <h4><a href="./crearTarea.html"> Crear una nueva tarea</a> </h4>
             </div>
-            <div v-if="listCurso" class="clases-contenedor" >
-                <div v-for="clase in listCurso" class="clases">
-                    <div class="nombre-clase">
-                        <h4>{{clase.numeroGrado}}</h4>
-                    </div>
-                    <div class="info-editar">
-                        
-                        <div class="info-clase">
-                            <a href="#" @click="listaAlumnosCurso(clase.id)"> ver Alumnos</a>
+            <div class="contenedor-row">
+                
+                <div v-if="listCurso" class="clases-contenedor" >
+                    <div v-for="clase in listCurso" class="clases">
+                        <div class="nombre-clase">
+                            <p>{{clase.numeroGrado}}</p>
                         </div>
-                        <div class="editar info-clase ">
-                            <a :href="'/Profesor/informacionCurso.html?='+clase.id"> Mas Info</a>
+                        <div class="info-editar">
+                            
+                            <div class="info-clase">
+                                <a href="#" @click="listaAlumnosCurso(clase.id)"> ver Alumnos</a>
+                            </div>
+                            <div class="editar info-clase ">
+                                <a :href="'/Profesor/informacionCurso.html?='+clase.id"> Mas Info</a>
+                            </div>
                         </div>
                     </div>
+                    
+                    
+        
                 </div>
-                
-                
-    
+                <div class="clases-contenedor" >
+                    <div v-if="listaTareaEntregada" v-for="tarea in listaTareaEntregada" class="clases">
+                        <div class="nombre-clase">
+                            <p>{{tarea.nombreTarea}}</p>
+                        </div>
+                        <div class="info-editar">
+                            
+                            <div class="info-clase">
+                                <a href="#" @click="listaAlumnoTareaEntregada(tarea.id)"> ver Alumnos</a>
+                            </div>
+                            <div class="editar info-clase ">
+                                <a :href="'/Profesor/detalleTarea.html?='+tarea.id"> Mas Info</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div v-if="listCurso == null" class="clases-contenedor">
+
+                    <div class="informacion-vacia">
+                        <h4>no tienea ningun curso a tu nombre</h4>
+                        <h5>crea uno <a href="./clase-create.html"> aqui </a></h5>
+                    </div>
+        
+                </div>
             </div>
+            
         </div>
         
         
-        <div v-if="listCurso == null" class="clases-contenedor">
-
-            <div class="informacion-vacia">
-                <h4>no tienea ningun curso a tu nombre</h4>
-                <h5>crea uno <a href="./clase-create.html"> aqui </a></h5>
-            </div>
-
-        </div>
+        
         {{filterSerchAlumnos}}
         <div>
+
+            
+
             <div class="filtros-alumnos">
                 <div class="col-md-6 mb-4">
                     <div class="form-outline">
@@ -81,8 +107,91 @@
                     </div>
                 </div>
             </div>
-            <div  v-if="listaAlumno"   class="alumnos-contenedor" >
-                <div v-for="alumnoInscrito in listaAlumnoFiltrado" class="alumno">
+            <div     class="alumnos-contenedor" >
+
+                <div v-if="listaAlumnosTareaEntregada" class="alumnos-contenedor">
+                    <div v-for="tarea in listaAlumnosTareaEntregada"  class="alumno">
+                        
+                            <div v-if="!corregir" class="info-alumno">
+                                <p>{{tarea.apodoAlumno}} 
+                                    <br>
+                                    ({{tarea.nombreAlumno + " " + tarea.apellidoAlumno}})  </p>
+                                <p> {{tarea.emailAlumno}}</p>
+                                <p>{{tarea.nota}}
+                                    <br>
+                                    {{tarea.estado}}
+                                </p>
+                                <a href="#" @click="descargarArchivo(tarea.idEntrega)"> {{tarea.nombreArchivo}}</a>
+    
+                            </div>
+                            <div v-if="!corregir" class="info-editar">
+                                <div  class="info-clase eliminar">
+                                    <a @click="corregirTarea()" href="#"> corregir</a>
+                                </div>
+                            </div>
+
+                        
+                            <div v-if="corregir" class="info-alumno">
+                                <p>Nota</p>
+                                <select v-model="tareaCorregida" >
+
+                                    <option value="Aprobado">Aprobado</option>
+
+                                    <option value="Desaprobado">Desaprobado</option>
+
+                                </select>
+                            </div>
+                            <div v-if="corregir" class="info-editar">
+                                <div  class="info-clase eliminar">
+                                    <a @click="guardarCorregirTarea(tarea.idEntrega)" href="#"> corregir</a>
+                                </div>
+                                <div  class="info-clase eliminar">
+                                    <a @click="" href="#"> Cancelar</a>
+                                </div>
+                            </div>
+                        
+                        
+                    <!-- Resto del código -->
+                    </div>
+                    <div v-if="listaAlumnosTareaEntregada.length === 0 || listaAlumnosTareaEntregada == null" class="informacion-vacia">
+                      <h4>Esta tarea no ha sido entregada por ningún alumno.</h4>
+                      <h5>Seleccione otra tarea o curso con alumnos.</h5>
+                    </div>
+                  </div>
+                  
+                  <div v-else-if="listaAlumno" class="alumnos-contenedor">
+                    <div v-for="alumnoInscrito in listaAlumno" class="alumno">
+                        <div class="info-alumno">
+                            <h6>{{alumnoInscrito.nombreAlumno}} 
+                                <br>
+                                ({{alumnoInscrito.alumno.nombre + " " + alumnoInscrito.alumno.apellido}})  </h6>
+                            <h4> {{alumnoInscrito.alumno.email}}</h4>
+                        </div>
+                        <div class="info-editar">
+                            <div class="info-clase">
+                                <a :href="'/Profesor/detalleAlumno.html?='+alumnoInscrito.id"> mas info</a>
+                            </div>
+                            <div  class="info-clase eliminar">
+                                <a @click="eliminarAlumnoDelCurso(alumnoInscrito.alumno.id)" href="#"> eliminar</a>
+                            </div>
+                        </div>
+                      <!-- Resto del código -->
+                    </div>
+                    <div v-if="listaAlumno.length === 0" class="informacion-vacia">
+                      <h4>No hay alumnos inscritos en este curso.</h4>
+                      <h5>Seleccione otro curso con alumnos.</h5>
+                    </div>
+                  </div>
+                  
+                  <div v-else class="alumnos-contenedor">
+                    <div class="informacion-vacia">
+                      <h4>No hay alumnos seleccionados.</h4>
+                      <h5>Seleccione un curso o tarea para ver los alumnos.</h5>
+                    </div>
+                  </div>
+                  
+
+                <!-- <div v-if="listaAlumno" v-for="alumnoInscrito in listaAlumnoFiltrado" class="alumno">
                     <div class="info-alumno">
                         <h6>{{alumnoInscrito.nombreAlumno}} 
                             <br>
@@ -100,22 +209,52 @@
                     
 
                 </div>
+                <div v-if="listaAlumnosTareaEntregada" class="alumnos-contenedor">
+                    <div v-for="tarea in listaAlumnosTareaEntregada" class="alumno">
+                        <div class="info-alumno">
+                            <p>{{tarea.apodoAlumno}} 
+                                <br>
+                                ({{tarea.nombreAlumno + " " + tarea.apellidoAlumno}})  </p>
+                            <p> {{tarea.emailAlumno}}</p>
+                            <p>{{tarea.estado}}
+                                <br>
+                                {{tarea.estado}}
+                            </p>
+
+                            <a href="#"> {{tarea.nombreArchivo}}</a>
+
+
+                        </div>
+                        <div class="info-editar">
+                            <div  class="info-clase eliminar">
+                                <a @click="eliminarAlumnoDelCurso(alumnoInscrito.alumno.id)" href="#"> corregir</a>
+                            </div>
+                        </div>
+                        
+    
+                    </div>
                 <div v-if="listaAlumnoFiltrado.length == 0">
                     <div  class="informacion-vacia">
                         <h4>este curso todavia no tiene alumnos inscritos</h4>
                         <h5>seleccione una otro curso con alumnos</h5>
                     </div>
                 </div>
+                <div v-if="istaAlumnosTareaEntregada.length == 0">
+                    <div  class="informacion-vacia">
+                        <h4>esta tarea todavia no fue entregada por ningun alumno</h4>
+                        <h5>seleccione una otro curso con alumnos</h5>
+                    </div>
+                </div>
                 
     
             </div>
-            <div v-if="listaAlumno == null" class="alumnos-contenedor">
+            <div v-if="listaAlumno == null && listaAlumnosTareaEntregada == null" class="alumnos-contenedor">
                 <div  class="informacion-vacia">
                     <h4>no hay alumnos seleccionados</h4>
                     <h5>selecciona en la lista de cursos</h5>
                 </div>
 
-            </div>
+            </div> -->
         </div>
         
     </main>

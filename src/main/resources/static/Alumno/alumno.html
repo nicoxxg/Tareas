@@ -39,7 +39,89 @@
     </nav>
     <main>
         
+            <div class="contenedor-row">
+                <div v-if="tareaEntregada" class="tareas-contenedor" >
+                    <h5>trabajos ya entregados</h5>
+                    <div v-for="clase in tareaEntregada" class="clases">
+                        <div v-if="!modificarArchivo" class="nombre-clase">
+                            <p>{{clase.nombreTarea}}
+                                <br>
+                                {{clase.nota}}
+                            </p>
+                            <a href="#" @click="descargarArchivo(clase.idEntrega)">{{clase.nombreArchivo}}</a>
+                        </div>
+                        <div v-if="modificarArchivo" class="nombre-clase flex-column" style="width: 45vw;">
+                            <p>
+                                {{clase.nombreArchivo}}
+                            </p>
+                        
+                            <form enctype="multipart/form-data" >
+                                <input class="file-select" id="archivoInput" type="file" ref="archivoInput" accept=".pdf, image/*" required>
+                            </form>
+                            
+                        </div>
+                        <div v-if="!modificarArchivo" class="info-editar">
+                            
+                            <div class="editar info-clase ">
+                                <a href="#" @click="activarModificarArchivo()"> Modificar</a>
+                            </div>
+                        </div>
+                        <div v-if="modificarArchivo" class="info-editar">
+                            <div  class="editar info-clase ">
+                                <a @click="cancelarModificar()" href="#"> Cancelar</a>
+                            </div>
+                            <div class="editar info-clase ">
+                                <a @click="modificarArchivoTarea(clase.idEntrega)" href="#">Guardar</a>
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                    
+        
+                </div>
+                <div v-if="tareasPendientes" class="tareas-contenedor" >
+                    <h5>trabajos pendientes</h5>
+                    <div v-for="clase in tareasPendientes" class="clases">
+                        <div class="nombre-clase" v-if="!porCrearEntrega">
+                            <p>{{clase.nombreTarea}}
+                            </p>
+                            <p>{{clase.descripcionTarea}}</p>
+                            
+                        </div>
+                        <div class="nombre-clase flex-column" v-if="porCrearEntrega">
+                            <p>{{clase.nombreTarea}}
+                            </p>
+                        
+                            <form enctype="multipart/form-data" >
+                                <input class="file-select" id="archivoInputTarea" type="file" ref="archivoInput" accept=".pdf, image/*" required>
+                            </form>
+                            
+                        </div>
+                        <div v-if="!porCrearEntrega" class="info-editar">
+                            
+                            <div class="editar info-clase ">
+                                <a @click="activarPorCrearEntrega()" href="#">Subir trabajo</a>
+                            </div>
+                        </div>
+                        <div v-if="porCrearEntrega" class="info-editar">
+                            <div class="editar info-clase ">
+                                <a @click="desactivarPorCrearEntrega()" href="#">Cancelar</a>
+                            </div>
+                            
+                            <div class="editar info-clase ">
+                                <a @click="crearEntrega(clase.id)" href="#">Guardar</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+        
+                </div>
+
+            </div>
             <div v-if="ListCursosInscrito.length != 0" class="clases-contenedor" >
+                <h3>Cursos anotados</h3>
                 <div v-for="clase in ListCursosInscrito" class="clases">
                     <div class="nombre-clase">
                         <h4>{{clase.curso.numeroGrado}}</h4>

@@ -15,8 +15,7 @@ public class ProfesorDTO {
     private String contraseña;
     private Perfiles perfiles;
     private Set<CursoDTO> cursosDictados;
-    private Map<TareaKeyDTO, Set<AlumnosVerificacionDTO>> verificacionesPorTarea;
-
+    private Set<TareaKeyDTO> verificacionesPorTarea;
 
     public ProfesorDTO(Profesor profesor) {
         this.id = profesor.getId();
@@ -29,8 +28,8 @@ public class ProfesorDTO {
                 .map((curso) -> new CursoDTO(curso)).collect(Collectors.toSet());
         this.verificacionesPorTarea = obtenerVerificacionesPorTarea(profesor);
     }
-    private Map<TareaKeyDTO, Set<AlumnosVerificacionDTO>> obtenerVerificacionesPorTarea(Profesor profesor) {
-        Map<TareaKeyDTO, Set<AlumnosVerificacionDTO>> verificacionesPorTarea = new HashMap<>();
+    private Set<TareaKeyDTO> obtenerVerificacionesPorTarea(Profesor profesor) {
+        Set<TareaKeyDTO> verificacionesPorTarea = new HashSet<>();
         for (Curso curso : profesor.getCursosDictados()) {
             for (Tarea tarea : curso.getTareas()) {
                 Set<AlumnosVerificacionDTO> verificaciones = new HashSet<>();
@@ -40,14 +39,13 @@ public class ProfesorDTO {
                     verificaciones.add(alumnosVerificacionDTO);
                 }
                 TareaKeyDTO tareaKey = new TareaKeyDTO(tarea);
-
-                verificacionesPorTarea.put(tareaKey, verificaciones);
+                verificacionesPorTarea.add(tareaKey);
             }
         }
         return verificacionesPorTarea;
     }
 
-    public Map<TareaKeyDTO, Set<AlumnosVerificacionDTO>> getVerificacionesPorTarea() {
+    public Set<TareaKeyDTO> getVerificacionesPorTarea() {
         return verificacionesPorTarea;
     }
 

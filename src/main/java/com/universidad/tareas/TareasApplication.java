@@ -42,6 +42,9 @@ public class TareasApplication {
 			Curso curso = new Curso("er", "er", TurnoClase.Mañana, admin);
 			cursoRepository.save(curso);
 
+			Curso cursop = new Curso("er", "er", TurnoClase.Mañana, profesor);
+			cursoRepository.save(cursop);
+
 			Curso curso1 = new Curso("6", "pepepe", TurnoClase.Mañana, admin);
 			cursoRepository.save(curso1);
 
@@ -56,23 +59,32 @@ public class TareasApplication {
 			Inscripcion inscripcion2 = new Inscripcion("Jane Smith", true, alumno2, curso);
 			inscripcionRepository.save(inscripcion1);
 			inscripcionRepository.save(inscripcion2);
+			Inscripcion inscripcion1p = new Inscripcion("John Doe", true, alumno1, cursop);
+			Inscripcion inscripcion2p = new Inscripcion("Jane Smith", true, alumno2, cursop);
+			inscripcionRepository.save(inscripcion1p);
+			inscripcionRepository.save(inscripcion2p);
+
 
 			// Crear tareas
 			Tarea tarea1 = new Tarea("Tarea 1", "Descripción de la Tarea 1", curso);
 			Tarea tarea2 = new Tarea("Tarea 2", "Descripción de la Tarea 2", curso);
 			tareaRepository.save(tarea1);
 			tareaRepository.save(tarea2);
+			Tarea tarea1p = new Tarea("Tarea 1", "Descripción de la Tarea 1", cursop);
+			Tarea tarea2p = new Tarea("Tarea 2", "Descripción de la Tarea 2", cursop);
+			tareaRepository.save(tarea1p);
+			tareaRepository.save(tarea2p);
 
 			// Crear entregas
 			Entrega entrega1 = new Entrega("John Doe", Nota.Aprobado, EstadoTarea.Entregado, null, "archivo1.txt", tarea1, alumno1);
 			Entrega entrega2 = new Entrega("Jane Smith", Nota.Desaprobado, EstadoTarea.Entregado, null, "archivo2.txt", tarea2, alumno2);
 			entregaRepository.save(entrega1);
 			entregaRepository.save(entrega2);
+			Entrega entrega1p = new Entrega("John Doe", Nota.Aprobado, EstadoTarea.Entregado, null, "archivo1.txt", tarea1p, alumno1);
+			Entrega entrega2p = new Entrega("Jane Smith", Nota.Desaprobado, EstadoTarea.Entregado, null, "archivo2.txt", tarea2p, alumno2);
+			entregaRepository.save(entrega1p);
+			entregaRepository.save(entrega2p);
 		};
-	}
-	@EventListener(ApplicationReadyEvent.class)
-	public void sendEmail(){
-		senderService.sendEmail("erickyma23gmail.com","subject","probando que ande");
 	}
 
 }

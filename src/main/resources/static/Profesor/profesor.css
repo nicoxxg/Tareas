@@ -100,19 +100,33 @@ nav div h1{
 }
 .alumno{
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     align-items: center;
     width: 95%;
     margin: 1rem;
     height: 5rem;
     background-color: rgb(188, 188, 188);
 }
+.contenedor-row{
+    display: flex;
+}
+.botones-crear{
+    display: flex;
+    justify-content: space-evenly;
+}
 .info-alumno{
-    width: 60%;
+    width: 80%;
     height: 3rem;
+
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.info-alumno p {
+    margin: 0.5rem;
+}
+.info-alumno a {
+    margin: 0.5rem;
 }
 .info-alumno h4{
     font-size: 1.3rem;
@@ -122,7 +136,9 @@ nav div h1{
     overflow: hidden;
     overflow-y: scroll;
     background-color:aquamarine;
-    width: 60vw;
+    width: 28vw;
+    margin: 1rem;
+    
     height: 15rem;
 }
 .alumnos-contenedor{

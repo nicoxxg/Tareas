@@ -15,6 +15,10 @@ main{
     align-items: center;
     flex-direction: column;
 }
+.contenedor-row{
+    display: flex;
+    justify-content: space-between;
+}
 nav{
     background-color: rgb(17, 203, 160);
     height: 10vh;
@@ -82,7 +86,10 @@ nav div h1{
     background-color: rgb(188, 188, 188);
 }
 .nombre-clase{
+    width: 100%;
     margin: 1rem;
+    display: flex;
+    justify-content: space-between;
 }
 .info-clase a{
     width: 7rem;
@@ -107,6 +114,22 @@ nav div h1{
     height: 5rem;
     background-color: rgb(188, 188, 188);
 }
+.info-alumno p {
+    margin: 0.5rem;
+}
+.info-alumno a {
+    margin: 0.5rem;
+}
+.clase-alumno{
+    margin: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 20%;
+    height: 30vh;
+    background-color: white;
+}
 .info-alumno{
     width: 60%;
     height: 3rem;
@@ -118,12 +141,58 @@ nav div h1{
     font-size: 1.3rem;
     margin: 1rem;
 }
+.tarea{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 95%;
+    margin: 1rem;
+    height: 5rem;
+    background-color: rgb(188, 188, 188);
+}.file-select {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .file-select::before {
+    background-color: #5678EF;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 3px;
+    content: 'Seleccionar'; /* testo por defecto */
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+  }
+  
+  .file-select input[type="file"] {
+    opacity: 0;
+    width: 1rem;
+    height: 1rem;
+    display: inline-block;
+  }
 .clases-contenedor{
     overflow: hidden;
     overflow-y: scroll;
     background-color:aquamarine;
-    width: 60vw;
-    height: 80vh;
+    width: 70vw;
+    height: 30vh;
+}
+#src-file1::before {
+    content: '';
+    font-size: 0.5rem;
+  }
+.tareas-contenedor{
+    overflow: hidden;
+    overflow-y: scroll;
+    background-color:aquamarine;
+    width: 47vw;
+    height: 30vh;
+    margin: 0.5rem;
 }
 .alumnos-contenedor{
     overflow: hidden;
