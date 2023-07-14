@@ -43,6 +43,9 @@ public class InscripcionController {
         if (inscripcionesRepetidas.size() != 0 ){
             return new ResponseEntity<>("ya estas inscrito en esta clase",HttpStatus.FORBIDDEN);
         }
+        if (apodo == null) {
+            apodo = alumno.getNombre() + " " + alumno.getApellido();
+        }
         if (curso == null){
             return new ResponseEntity<>("no se ah encontrado el curso",HttpStatus.FORBIDDEN);
         }

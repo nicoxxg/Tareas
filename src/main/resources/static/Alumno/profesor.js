@@ -27,6 +27,7 @@ createApp({
         tareaEntregada:[],
         tareasPendientes:[],
         porCrearEntrega:false,
+        tareaCursoInscrito:[],
 
     }
     },
@@ -157,6 +158,10 @@ createApp({
         },
         crearInscripcionCurso(idCurso){
             let id = window.location.href.split('?=')[1]
+
+            if (this.apodoInscripcion == null) {
+                this.apodoInscripcion = this.cliente.nombre + " " + this.cliente.apellido
+            }
             
             axios.post("/api/Inscripcion/create",`apodo=${this.apodoInscripcion}&idCurso=${id}`)
             .then((response) => {
@@ -189,7 +194,8 @@ createApp({
             let id = window.location.href.split('?=')[1]
             axios.get(`/api/current/inscripcion/${id}`).then((response) =>{
                 this.cursoInformacion = response.data
-                
+                this.tareaCursoInscrito = response.data.curso.tarea.sort((a,b) => a.id - b.id)
+                console.log(this.tareaCursoInscrito)
             })
         },
         eliminarAlumnoDelCurso(id){

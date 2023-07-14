@@ -41,59 +41,83 @@
         <div class="contenedor-informacion-alumno" v-if="cursoInformacion.length != 0">
             <div>
                 <h3>informacion de {{cursoInformacion.curso.numeroGrado}} </h3>
-                <div class="informacion-alumno" >
-                    <div>
-                        <p  >Profesor a cargo: {{cursoInformacion.curso.profesor.nombre + " "+ cursoInformacion.curso.profesor.apellido}} </p>
-                        <p  >turno: {{cursoInformacion.curso.turno}} </p>
-                        
-                        
-                    </div>
-
-                    <div >
-                        <p  > Descripcion: {{cursoInformacion.curso.descripcion}} </p>
-                        
-                    </div>
-
-                    
-                    
-
-                </div>
-            </div>
-            
-            <div class="contenedor-clases-alumno" >
-                <div class="clase-alumno" v-if="!cambiarApodo">
-                    <h6>apodo: {{cursoInformacion.nombreAlumno}} </h6>
-                    <h6>email: {{cursoInformacion.alumno.email}} </h6>
-                    <div class="info-alumno" >
-                        <div  class="info-clase eliminar">
-                            <a @click="eliminarAlumnoDelCurso(cursoInformacion.alumno.id)" href="#"> eliminar</a>
+                <div class="informacion-alumno-inscrito">
+                    <div  class="informacion-alumno">
+                        <div>
+                            <p  >Profesor a cargo: {{cursoInformacion.curso.profesor.nombre + " "+ cursoInformacion.curso.profesor.apellido}} </p>
+                            <p  >turno: {{cursoInformacion.curso.turno}} </p>
+                            
+                            
                         </div>
-                        <div  class="info-clase editar">
-                            <a @click="activarCambiarApodo()" href="#"> editar apodo</a>
+    
+                        <div >
+                            <p  > Descripcion: {{cursoInformacion.curso.descripcion}} </p>
+                            
                         </div>
-                    </div>
 
-                    
-                </div>
-                <div class="contenedor-clases-alumno" v-else>
-                    <div class="clase-alumno">
-                        <h6>apodo: <input v-model="nuevoApodo" type="text"> </h6>
-                        <h6></h6>
+                    </div>
+                    <div class="clase-alumno" v-if="!cambiarApodo">
+                        <h6>apodo: {{cursoInformacion.nombreAlumno}} </h6>
+                        <h6>email: {{cursoInformacion.alumno.email}} </h6>
                         <div class="info-alumno" >
                             <div  class="info-clase eliminar">
-                                <a @click="desactivarCambiarApodo()" href="#"> cancelar</a>
+                                <a @click="eliminarAlumnoDelCurso(cursoInformacion.alumno.id)" href="#"> eliminar</a>
                             </div>
                             <div  class="info-clase editar">
-                                <a @click="editarApodoCurso(cursoInformacion.alumno.id)" href="#"> guardar</a>
+                                <a @click="activarCambiarApodo()" href="#"> editar apodo</a>
                             </div>
                         </div>
     
                         
                     </div>
-                    
-                
+                    <div class="clase-alumno " v-else>
+                        <h6>apodo: <input v-model="nuevoApodo" type="text"> </h6>
+                        <h6></h6>
+                        <div class="info-alumno" >
+                            <div  class="info-clase editar">
+                                <a @click="editarApodoCurso(cursoInformacion.alumno.id)" href="#"> guardar</a>
+                            </div>
+                            <div  class="info-clase eliminar">
+                                <a @click="desactivarCambiarApodo()" href="#"> cancelar</a>
+                            </div>
+                            
+                        </div>
+    
+                        
+                    </div>
+
                 </div>
-            <div>
+                    
+                    
+            </div>
+            
+            <div class="contenedor-clases-alumno" >
+                    <div v-if="tareaCursoInscrito" v-for="tarea in tareaCursoInscrito" class="tarea">
+                        <p>tarea: {{tarea.nombreTarea}}</p>
+                        <p>descripcion: {{tarea.descripcionTarea}}</p>
+                        <div v-if="tareaEntregada" v-for="entrega in tareaEntregada">
+                            <div class="informacion-tarea" v-if="entrega.id == tarea.id">
+                                <p>nota: {{entrega.nota}} </p>
+                                <a @click="descargarArchivo(entrega.idEntrega)" href="#">{{entrega.nombreArchivo}}</a>
+                                <a href="#"  >
+                                    modificar
+                                    
+                                </a>
+                            </div>
+                            
+                        </div>
+                        <div class="informacion-tarea" v-if="tareasPendientes" v-for="entrega in tareasPendientes">
+                            <a href="#" v-if="entrega.id == tarea.id">entregar</a>
+                        </div>
+
+                        
+                        
+                    </div>
+                
+                
+
+            </div>
+
         </div>
         <div v-if="cursoInformacion.length == 0" class="contenedor-formulario-crear-clase"> 
             no hay ningun curso seleccionado o no existe

@@ -211,6 +211,9 @@ nav div h1{
 .info-editar{
     display: flex;
 }
+.informacion-alumno-inscrito{
+    display: flex;
+}
 .informacion-vacia{
     margin: 2rem;
     width: 90%;
@@ -248,12 +251,38 @@ nav div h1{
     overflow: hidden;
     overflow-y: scroll;
     display: flex;
-    align-items: center;
     flex-wrap: wrap;
+    flex-direction: row;
+
+}
+.tarea{
+    
+    display: flex;
+    word-wrap: break-word;
+    align-items: flex-start;
+    flex-direction: column;
+    width: 15rem;
+    height: 30vh;
+    background-color: white;
+}
+.informacion-tarea{
+    word-wrap: break-word;
+
+    display: flex;
+    flex-direction: column;
+}
+.informacion-tarea p{
+    word-wrap: break-word;
+    margin: 0.5rem;
+}
+.informacion-tarea a{
+    margin: 0.5rem;
+}
+.tarea p{
+    word-wrap: break-word;
+    margin: 0.5rem;
 }
 .clase-alumno{
-    margin: 1rem;
-    display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;

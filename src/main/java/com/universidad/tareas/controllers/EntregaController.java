@@ -45,7 +45,6 @@ public class EntregaController {
         }
         Inscripcion inscripcion = inscripcionOptional.get();
         Curso curso = inscripcion.getCurso();
-        // Resto del código...
         String nombreAlumno = alumno.getInscripciones().stream()
                 .filter(inscripcion1 -> inscripcion1.getCurso().equals(tarea.getCurso()))
                 .findFirst()
