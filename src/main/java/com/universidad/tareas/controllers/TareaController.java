@@ -1,6 +1,7 @@
 package com.universidad.tareas.controllers;
 
 import com.universidad.tareas.DTOs.TareaDTO;
+import com.universidad.tareas.models.Alumno;
 import com.universidad.tareas.models.Curso;
 import com.universidad.tareas.models.Profesor;
 import com.universidad.tareas.models.Tarea;
@@ -28,6 +29,20 @@ public class TareaController {
     AlumnoRepository alumnoRepository;
     @Autowired
     CursoRepository cursoRepository;
+
+    @GetMapping("/alumno/response/tarea/{id}")
+    private ResponseEntity<Object> obtenerTareaDeAlumnoPorId(Authentication authentication,@PathVariable long id){
+        Alumno alumno = alumnoRepository.findByEmail(authentication.getName());
+        Tarea tarea = tareaRepository.findById(id).orElse(null);
+        if (tarea == null) {
+            return new ResponseEntity<>("no existe la tarea",HttpStatus.FORBIDDEN);
+
+        }
+        if (alumno.getInscripciones().stream().filter(inscripcion -> inscripcion.getCurso().getId() == tarea.getCurso().getId()).findFirst() == null){
+            return new ResponseEntity<>("la tarea no le pertenece al alumno",HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity<>(new TareaDTO(tarea),HttpStatus.ACCEPTED);
+    }
     @GetMapping("/tarea/{idTarea}")
     private ResponseEntity<TareaDTO> getTareaById(@PathVariable long idTarea){
         return new ResponseEntity<>(new TareaDTO(tareaRepository.findById(idTarea)

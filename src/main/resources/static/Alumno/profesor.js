@@ -28,19 +28,38 @@ createApp({
         tareasPendientes:[],
         porCrearEntrega:false,
         tareaCursoInscrito:[],
+        tareaCargadaPorId:[],
+        tareaEntregadaPorId:[],
 
     }
     },
     
     created(){
+        this.obtenerTareaEntregadaPorId()
         this.obtenerCliente();
         this.obtenerCursoInscritoPorId()
         this.obtenerTodosCursosInscrito()
         this.obtenerTodasLasClases()
         this.redireccionarDetalleCurso()
-
+        this.obtenerTareaPorId()
     },
     methods:{
+        obtenerTareaEntregadaPorId(){
+            let id = window.location.href.split('?=')[1]
+            axios.get(`/api/alumno/response/entrega/${id}`)
+            .then((response) => {
+                this.tareaEntregadaPorId = response.data
+                console.log(this.tareaEntregadaPorId)
+            })
+        },
+        obtenerTareaPorId(){
+            let id = window.location.href.split('?=')[1]
+            axios.get(`/api/alumno/response/tarea/${id}`)
+            .then((response) =>{
+                this.tareaCargadaPorId = response.data
+                console.log(this.tareaCargadaPorId)
+            })
+        },
         activarPorCrearEntrega(){
             this.porCrearEntrega = true
         },
@@ -62,7 +81,8 @@ createApp({
             console.log(formData)
             axios.post(`/api/alumno/tarea/${idTarea}/entrega`, formData,config)
             .then(response => {
-                window.location.reload()
+                window.location.href = "/Alumno/alumno.html"
+
                 console.log('Archivo subido correctamente');
             })
             .catch(error => {
@@ -84,8 +104,9 @@ createApp({
             console.log(formData)
             axios.patch(`/api/alumno/entrega/${id}/modificar`, formData,config)
             .then(response => {
-                window.location.reload()
                 console.log('Archivo subido correctamente');
+                window.location.href = "/Alumno/alumno.html"
+
             })
             .catch(error => {
                 console.error('Error al subir el archivo:', error);

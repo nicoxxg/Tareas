@@ -1,6 +1,8 @@
 package com.universidad.tareas.controllers;
 
 import ch.qos.logback.core.net.server.Client;
+import com.universidad.tareas.DTOs.AlumnoTareaDTO;
+import com.universidad.tareas.DTOs.TareaDTO;
 import com.universidad.tareas.models.*;
 import com.universidad.tareas.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,19 @@ public class EntregaController {
     CursoRepository cursoRepository;
     @Autowired
     EntregaRepository entregaRepository;
+
+    @GetMapping("/alumno/response/entrega/{id}")
+    public ResponseEntity<Object> obtenertareaEntregadaDTO(Authentication authentication,@PathVariable long id){
+        Alumno alumno = alumnoRepository.findByEmail(authentication.getName());
+        Entrega entrega = alumno.getEntregas().stream().filter(entrega1 -> entrega1.getId() == id).findFirst().orElse(null);
+        if (entrega == null) {
+            return new ResponseEntity<>("la tarea entregada no existe",HttpStatus.FORBIDDEN);
+        }
+
+
+        return new ResponseEntity<>(new AlumnoTareaDTO(entrega.getTarea(),entrega),HttpStatus.ACCEPTED);
+    }
+
     @PostMapping("/alumno/tarea/{idTarea}/entrega")
     public ResponseEntity<Object> crearNuevaEntrega(Authentication authentication,@PathVariable long idTarea,@RequestParam MultipartFile files) throws IOException {
         Alumno alumno = alumnoRepository.findByEmail(authentication.getName());
@@ -68,6 +83,10 @@ public class EntregaController {
 
         if (!alumno.getEntregas().stream().anyMatch(entrega1 -> entrega1.equals(entrega))) {
             return new ResponseEntity<>("El trabajo no pertenece al alumno", HttpStatus.FORBIDDEN);
+        }
+        if (entrega.getNota() != Nota.Calificando) {
+            return new ResponseEntity<>("El trabajo ya fue corregido, no se puede modificar.", HttpStatus.FORBIDDEN);
+
         }
         entrega.setArchivo(newFile.getBytes());
         entrega.setNombreArchivo(newFile.getOriginalFilename());

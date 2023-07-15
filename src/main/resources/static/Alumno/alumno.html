@@ -63,7 +63,8 @@
                         <div v-if="!modificarArchivo" class="info-editar">
                             
                             <div class="editar info-clase ">
-                                <a href="#" @click="activarModificarArchivo()"> Modificar</a>
+                                <!-- @click="activarModificarArchivo()" -->
+                                <a :href="'./editarEntrega.html?='+clase.idEntrega " > Modificar</a>
                             </div>
                         </div>
                         <div v-if="modificarArchivo" class="info-editar">
@@ -71,7 +72,8 @@
                                 <a @click="cancelarModificar()" href="#"> Cancelar</a>
                             </div>
                             <div class="editar info-clase ">
-                                <a @click="modificarArchivoTarea(clase.idEntrega)" href="#">Guardar</a>
+                                <!--  -->
+                                <a @click="modificarArchivoTarea(clase.idEntrega)"  >Guardar</a>
                             </div>
                         </div>
 
@@ -101,7 +103,8 @@
                         <div v-if="!porCrearEntrega" class="info-editar">
                             
                             <div class="editar info-clase ">
-                                <a @click="activarPorCrearEntrega()" href="#">Subir trabajo</a>
+                                <!-- @click="activarPorCrearEntrega()" -->
+                                <a  :href="'./crearEntrega.html?='+clase.id">Subir trabajo</a>
                             </div>
                         </div>
                         <div v-if="porCrearEntrega" class="info-editar">

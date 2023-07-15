@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="./profesor.css" />
+    <title>Login & Register Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    
+</head>
+
+<body>
+  <div id="app">
+
+    <nav>
+        <div>
+            <h1>Escuela Unitaria</h1>
+        </div>
+        <div class="contenedor-perfil">
+            <div class="perfil" @click="cambiarLabel()">
+                <h4>{{cliente.nombre+ " "+ cliente.apellido }}</h4>
+                <img src="./img/3135768.png" alt="" class="foto-perfil">
+                
+            </div>
+            <div class="label" v-if="label">
+              <a href="perfil.html">Perfil</a>
+                <a href="./alumno.html">Clases</a>
+                <a href="./lista-cursos.html">Cursos</a>
+                <button @click="logout()">Cerrar Sesion</button>
+              
+            </div>
+        </div>
+        
+        
+    </nav>
+    <main>
+        <h3>formulario para unirte a la clase</h3>
+        <div class="contenedor-formulario-crear-clase">
+            
+                <div class="container">
+                  <div class="row d-flex justify-content-center align-items-center h-100">
+                    
+                      
+                        <div class="card-body p-1 text-center">
+              
+                          <div class="mb-md-5 mt-md-4 pb-5">
+
+                            <div class="form-outline form-white mb-4">
+                                <form enctype="multipart/form-data" >
+                                    <div class="mb-3">
+                                        <label for="archivoInputTarea"  >seleccione el nuevo archivo</label>
+                                        <input class="form-control" id="archivoInput" type="file" accept=".pdf, image/*"  class="form-label">
+                                    </div>
+                                </form>
+                            </div>
+    
+                            <div class="form-outline form-white mb-4">
+                                <h2>nombre tarea</h2>
+                                <input type="text" disabled id="typeEmailX" class="form-control form-control-lg"  :placeholder="tareaEntregadaPorId.nombreTarea" />
+                            </div>
+                            <div class="form-outline form-white mb-4">
+                                <h2>archivo antiguo</h2>
+                                <a href="#" @click="descargarArchivo(tareaEntregadaPorId.idEntrega)"><h2>{{tareaEntregadaPorId.nombreArchivo}}</h2>  </a>
+                            </div>
+                            <div class="form-outline form-white mb-4" >
+                                <h2>nota tarea</h2>
+                                <input type="text" disabled id="typeEmailX" class="form-control form-control-lg"  :placeholder="tareaEntregadaPorId.nota" />
+
+                            </div>
+
+              
+                            <div class="form-outline form-white mb-4">
+                                <h2>descripcion Tarea</h2>
+                                <h4>{{tareaEntregadaPorId.descripcion}}</p>
+                              
+                            </div>
+                            
+                            
+              
+                            <button @click="modificarArchivoTarea(tareaEntregadaPorId.idEntrega)" class="btn btn-outline-dark btn-lg px-5"   type="submit">Editar</button>
+              
+                            
+              
+                          </div>
+              
+              
+                        </div>
+                      
+                    </div>
+                  </div>
+                </div>
+              
+        </div>
+        
+    </main>
+
+  </div>
+    <!-- Pills navs -->
+    
+    <script src="https://kit.fontawesome.com/db55518b9d.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/Alumno/profesor.js"></script>
+</body>
+</html>

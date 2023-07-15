@@ -40,7 +40,7 @@ class WebAuthorization extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PATCH,"/api/alumno/{idAlumno}/inscripcion/{id}/actualizar","/api/alumno/{id}/suspender","/api/profesor/entrega/{idEntrega}/modificar").hasAnyAuthority("Profesor","Admin")
                 .antMatchers(HttpMethod.PATCH,"/api/alumno/current/actualizar","/api/alumno/current/actualizar","/api/current/inscripcion/{id}/actualizar/apodo","/api/alumno/entrega/{id}/modificar").hasAuthority("Alumno")
                 .antMatchers(HttpMethod.POST,"/api/curso/create","/api/current/inscripcion/{id}","/api/tarea").hasAnyAuthority("Admin","Profesor")
-                .antMatchers("/api/current/inscripcion","/api/alumno/entrega/{archivoId}").hasAuthority("Alumno")
+                .antMatchers("/api/current/inscripcion","/api/alumno/entrega/{archivoId}","/api/alumno/response/tarea/{id}","/api/alumno/response/entrega/{id}").hasAuthority("Alumno")
                 .antMatchers("/api/current/**","/api/tarea/{idTarea}").hasAnyAuthority("Admin","Alumno","Profesor")
                 .antMatchers("/api/Inscripcion/create","/api/current/inscripcion/{id}","/api/alumno","/api/alumno/{id}","/api/profesor/entrega/{archivoId}").hasAnyAuthority("Profesor","Admin")
                 .antMatchers("/api/curso","/api/current","/api/curso/{id}").hasAnyAuthority("Admin","Profesor","Alumno")

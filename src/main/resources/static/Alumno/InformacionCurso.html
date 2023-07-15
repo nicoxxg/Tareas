@@ -99,15 +99,15 @@
                             <div class="informacion-tarea" v-if="entrega.id == tarea.id">
                                 <p>nota: {{entrega.nota}} </p>
                                 <a @click="descargarArchivo(entrega.idEntrega)" href="#">{{entrega.nombreArchivo}}</a>
-                                <a href="#"  >
+                                <a :href="'./editarEntrega.html?='+entrega.idEntrega"  >
                                     modificar
                                     
                                 </a>
                             </div>
                             
                         </div>
-                        <div class="informacion-tarea" v-if="tareasPendientes" v-for="entrega in tareasPendientes">
-                            <a href="#" v-if="entrega.id == tarea.id">entregar</a>
+                        <div class="informacion-tarea" v-if="tareasPendientes" v-for="tareaPendiente in tareasPendientes">
+                            <a :href="'./crearEntrega.html?='+tareaPendiente.id" v-if="tareaPendiente.id == tarea.id">entregar</a>
                         </div>
 
                         
